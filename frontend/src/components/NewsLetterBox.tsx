@@ -20,7 +20,7 @@ const NewsLetterBox: React.FC = () => {
           type="email"
           name="email"
           placeholder="Enter your email"
-          className="w-full sm:w-3/4 border border-gray-300 focus:border-black focus:ring-1 focus:ring-black p-3 rounded-md transition duration-200 outline-none text-sm"
+          className="w-full sm:w-3/4 border border-gray-300 p-3 rounded-md transition duration-200 outline-none text-sm"
           required
         />
         <button

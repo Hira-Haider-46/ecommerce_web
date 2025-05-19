@@ -38,9 +38,9 @@ const Login: React.FC = () => {
           required
         />
         <div className="w-full flex justify-between text-sm mt-[-8px]">
-          <p className="cursor-pointer hover:underline">Forgot password?</p>
+          <p className="cursor-pointer hover:underline text-xs md:text-base my-2">Forgot password?</p>
           {currState === "Login" ? (
-            <p className="text-gray-600">
+            <p className="my-2 text-gray-600 text-xs md:text-base">
               Don't have an account?{" "}
               <span
                 onClick={() => setCurrState("Sign Up")}
@@ -50,7 +50,7 @@ const Login: React.FC = () => {
               </span>
             </p>
           ) : (
-            <p className="text-gray-600" onClick={() => setCurrState("Login")}>
+            <p className="my-2 text-gray-600 text-xs md:text-base" onClick={() => setCurrState("Login")}>
               Already have an account?{" "}
               <span className="cursor-pointer text-gray-800 hover:underline">
                 Login
