@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+
+@import "tailwindcss";
+
+* {
+    font-family: Outfit;
+    box-sizing: border-box;
+}
+
+.prata-regular {
+    font-family: "Prata", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
