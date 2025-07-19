@@ -108,7 +108,6 @@
     "negotiator": "^1.0.0",
     "node-addon-api": "^8.3.1",
     "node-gyp-build": "^4.8.4",
-    "nodemon": "^3.1.10",
     "normalize-path": "^3.0.0",
     "object-assign": "^4.1.1",
     "object-inspect": "^1.13.4",
@@ -167,8 +166,8 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "start": "node dist/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "Hira Haider",
@@ -182,6 +181,8 @@
     "@types/multer": "^1.4.12",
     "@types/node": "^22.15.19",
     "@types/validator": "^13.15.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
