@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { assets } from "../assets/frontend_assets/assets";
+import { assets } from "../assets/assets";
 
 const Footer : React.FC = () => {
   return (

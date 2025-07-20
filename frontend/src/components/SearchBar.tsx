@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/frontend_assets/assets";
 import { useLocation } from "react-router-dom";
+import { ShopContext } from "../context/ShopContext";
+import { assets } from "../assets/assets";
 
 const SearchBar : React.FC = () => {
 

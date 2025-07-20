@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from "react";
-import { products } from "../assets/frontend_assets/assets";
+import { products } from "../assets/assets";
 import { toast } from "react-toastify";
 
 interface ShopContextType {

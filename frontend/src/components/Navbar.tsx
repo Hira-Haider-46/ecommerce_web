@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { assets } from "../assets/frontend_assets/assets.ts";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets.ts";
 import { ShopContext } from "../context/ShopContext.tsx";
 
 const Navbar: React.FC = () => {

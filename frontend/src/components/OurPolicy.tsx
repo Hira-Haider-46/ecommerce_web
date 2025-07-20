@@ -1,4 +1,4 @@
-import { assets } from "../assets/frontend_assets/assets";
+import { assets } from "../assets/assets";
 
 const OurPolicy : React.FC = () => {
   return (

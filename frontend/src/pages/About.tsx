@@ -1,11 +1,11 @@
-import { assets } from "../assets/frontend_assets/assets";
+import { assets } from "../assets/assets";
 import NewsLetterBox from "../components/NewsLetterBox";
 import Title from "../components/Title";
 
 const About : React.FC = () => {
   return (
     <div>
-      <div className="border-t border-gray-300 text-2xl text-center pt-8 border-t">
+      <div className="border-gray-300 text-2xl text-center pt-8 border-t">
         <Title text1="ABOUT" text2="US" />
       </div>
       <div className="my-10 flex flex-col md:flex-row gap-16">

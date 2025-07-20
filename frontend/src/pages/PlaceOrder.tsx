@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { assets } from "../assets/frontend_assets/assets";
+import { assets } from "../assets/assets";
 import CartTotal from "../components/CartTotal";
 import Title from "../components/Title";
 import { useNavigate } from "react-router-dom";

@@ -1,4 +1,4 @@
-import { assets } from "../assets/frontend_assets/assets";
+import { assets } from "../assets/assets";
 import NewsLetterBox from "../components/NewsLetterBox";
 import Title from "../components/Title";
 
