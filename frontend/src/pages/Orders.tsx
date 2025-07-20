@@ -23,7 +23,11 @@ const Orders: React.FC = () => {
             >
               <div className="flex items-start gap-6 text-sm">
                 <img
-                  src={item.image[0]}
+                  src={
+                    item.images && item.images.length > 0
+                      ? item.images[0]
+                      : "/placeholder-image.png"
+                  }
                   alt="product item img"
                   className="w-16 sm:w-20"
                 />
@@ -46,7 +50,9 @@ const Orders: React.FC = () => {
                   <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
                   <p className="text-sm md:text-base">Ready to ship</p>
                 </div>
-                <button className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700 rounded-sm cursor-pointer hover:bg-white border border-black hover:text-black transition-all duration-400">Track Order</button>
+                <button className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700 rounded-sm cursor-pointer hover:bg-white border border-black hover:text-black transition-all duration-400">
+                  Track Order
+                </button>
               </div>
             </div>
           );

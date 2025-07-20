@@ -1,11 +1,71 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const Login: React.FC = () => {
   const [currState, setCurrState] = useState<string>("Login");
+  const context = useContext(ShopContext);
+
+  if (!context) {
+    throw new Error("Login must be used within a ShopProvider");
+  }
+
+  const { token, setToken, navigate, backendUrl } = context;
+
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      if (currState === "Sign Up") {
+
+        const res = await axios.post(backendUrl + "/api/user/register", {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (res.data.success) {
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          navigate("/");
+        } else {
+          toast.error(res.data.message);
+        }
+      } else {
+        const res = await axios.post(backendUrl + "/api/user/login", {
+          email: formData.email,
+          password: formData.password,
+        });
+        if (res.data.success) {
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          navigate("/");
+        } else {
+          toast.error(res.data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "An unknown error occurred");
+    }
   };
+
+  useEffect(() => {
+    if(token) {
+      navigate("/");
+    }
+  }, [token]);
 
   return (
     <div className="border-t border-gray-300">
@@ -23,6 +83,8 @@ const Login: React.FC = () => {
             className="w-full px-4 py-2 border border-gray-400 rounded-md outline-none"
             placeholder="Name"
             required
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={formData.name}
           />
         )}
         <input
@@ -30,15 +92,23 @@ const Login: React.FC = () => {
           className="w-full px-4 py-2 border border-gray-400 rounded-md outline-none"
           placeholder="Email"
           required
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={formData.email}
         />
         <input
           type="password"
           className="w-full px-4 py-2 border border-gray-400 rounded-md outline-none"
           placeholder="Password"
           required
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
+          }
+          value={formData.password}
         />
         <div className="w-full flex justify-between text-sm mt-[-8px]">
-          <p className="cursor-pointer hover:underline text-xs md:text-base my-2">Forgot password?</p>
+          <p className="cursor-pointer hover:underline text-xs md:text-base my-2">
+            Forgot password?
+          </p>
           {currState === "Login" ? (
             <p className="my-2 text-gray-600 text-xs md:text-base">
               Don't have an account?{" "}
@@ -50,7 +120,10 @@ const Login: React.FC = () => {
               </span>
             </p>
           ) : (
-            <p className="my-2 text-gray-600 text-xs md:text-base" onClick={() => setCurrState("Login")}>
+            <p
+              className="my-2 text-gray-600 text-xs md:text-base"
+              onClick={() => setCurrState("Login")}
+            >
               Already have an account?{" "}
               <span className="cursor-pointer text-gray-800 hover:underline">
                 Login

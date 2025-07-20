@@ -7,6 +7,7 @@ import {
   useCallback,
 } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export interface ProductType {
   _id: string;
@@ -35,6 +36,9 @@ interface ShopContextType {
   updateQuantity: (id: string, size: string, quantity: number) => Promise<void>;
   getCartAmount: () => number;
   backendUrl: string;
+  token: string;
+  setToken: React.Dispatch<React.SetStateAction<string>>;
+  navigate: (path: string) => void;
 }
 
 interface ShopContextProviderProps {
@@ -50,7 +54,9 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
 }) => {
   const currency = "$";
   const delivery_fee = 10;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -58,6 +64,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
     Record<string, Record<string, number>>
   >({});
   const [products, setProducts] = useState<ProductType[]>([]);
+  const [token, setToken] = useState<string>("");
 
   const addToCart = async (id: string, size: string) => {
     if (!size) {
@@ -106,7 +113,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
   const getProductsData = useCallback(async () => {
     try {
       const res = await axios.get(`${backendUrl}/api/product/list`);
-      if(res.data.success) setProducts(res.data.products);
+      if (res.data.success) setProducts(res.data.products);
       else toast.error(res.data.message);
     } catch (error) {
       toast.error("Error fetching products");
@@ -116,6 +123,12 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
   useEffect(() => {
     getProductsData();
   }, [getProductsData]);
+
+  useEffect(() => {
+    if(!token && localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token") || "");
+    }
+  }, []);
 
   const value: ShopContextType = {
     products,
@@ -131,6 +144,9 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
     updateQuantity,
     getCartAmount,
     backendUrl,
+    token,
+    setToken,
+    navigate,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
