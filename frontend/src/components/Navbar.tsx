@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
   if(!context) {
     throw new Error("Navbar must be used within a ShopContextProvider");
   }
-  const { setShowSearch, getCartCount, navigate, token, setToken } = context;
+  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = context;
   const location = useLocation();
 
   const showSearchBar = () => {
@@ -21,6 +21,7 @@ const Navbar: React.FC = () => {
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
+    setCartItems({});
     navigate("/login");
   }
 

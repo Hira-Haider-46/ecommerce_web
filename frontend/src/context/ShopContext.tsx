@@ -39,6 +39,9 @@ interface ShopContextType {
   token: string;
   setToken: React.Dispatch<React.SetStateAction<string>>;
   navigate: (path: string) => void;
+  setCartItems: React.Dispatch<
+    React.SetStateAction<Record<string, Record<string, number>>>
+  >;
 }
 
 interface ShopContextProviderProps {
@@ -78,6 +81,20 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
       cartData[id] = { [size]: 1 };
     }
     setCartItems(cartData);
+    if (token) {
+      try {
+        await axios.post(
+          `${backendUrl}/api/cart/add`,
+          { id, size },
+          { headers: { token } }
+        );
+        toast.success("Item added to cart");
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "Error adding item to cart"
+        );
+      }
+    }
   };
 
   const getCartCount = () => {
@@ -93,8 +110,29 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
   const updateQuantity = async (id: string, size: string, quantity: number) => {
     const cartData = structuredClone(cartItems);
     if (cartData[id]) {
-      cartData[id][size] = quantity;
+      if (quantity <= 0) {
+        delete cartData[id][size];
+        if (Object.keys(cartData[id]).length === 0) {
+          delete cartData[id];
+        }
+      } else {
+        cartData[id][size] = quantity;
+      }
       setCartItems(cartData);
+
+      if (token) {
+        try {
+          await axios.put(
+            `${backendUrl}/api/cart/update`,
+            { id, size, quantity },
+            { headers: { token } }
+          );
+        } catch (error) {
+          toast.error(
+            error instanceof Error ? error.message : "Error updating cart"
+          );
+        }
+      }
     }
   };
 
@@ -109,6 +147,26 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
     }
     return total;
   };
+
+  const getUserCart = useCallback(
+    async (userToken: string) => {
+      try {
+        const res = await axios.post(
+          `${backendUrl}/api/cart/get`,
+          {},
+          {
+            headers: { token: userToken },
+          }
+        );
+        if (res.data.success) {
+          setCartItems(res.data.cartData);
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    },
+    [backendUrl]
+  );
 
   const getProductsData = useCallback(async () => {
     try {
@@ -125,10 +183,15 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
   }, [getProductsData]);
 
   useEffect(() => {
-    if(!token && localStorage.getItem("token")) {
-      setToken(localStorage.getItem("token") || "");
+    const localToken = localStorage.getItem("token");
+    if (!token && localToken) {
+      setToken(localToken);
+      getUserCart(localToken);
     }
-  }, []);
+    if (token) {
+      getUserCart(token);
+    }
+  }, [token, getUserCart]);
 
   const value: ShopContextType = {
     products,
@@ -147,6 +210,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
     token,
     setToken,
     navigate,
+    setCartItems,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
