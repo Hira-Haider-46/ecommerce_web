@@ -34,7 +34,12 @@ const placeOrderRazorpay = async (req: Request, res: Response) => {
 }
 
 const allOrders = async (req: Request, res: Response) => {
-
+    try {
+        const orders = await orderModel.find({});
+        res.json({success: true, orders});
+    } catch (error) {
+        res.json({success: false, message: error instanceof Error ? error.message : "Unknown error"});
+    }
 }
 
 const userOrders = async (req: Request, res: Response) => {
@@ -48,7 +53,13 @@ const userOrders = async (req: Request, res: Response) => {
 }
 
 const updateStatus = async (req: Request, res: Response) => {
-
+    try {
+        const {orderId, status} = req.body;
+        await orderModel.findByIdAndUpdate(orderId, {status});
+        res.json({success: true, message: "Order status updated successfully"});
+    } catch (error) {
+        res.json({success: false, message: error instanceof Error ? error.message : "Unknown error"});
+    }
 }
 
 export {

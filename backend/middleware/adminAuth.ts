@@ -3,15 +3,14 @@ import type { Request, Response, NextFunction } from "express";
 
 const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { token } = req.headers;
-    if (!token) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       res.json({ success: false, message: "No token provided" });
       return;
     }
-    if (typeof token !== "string") {
-      res.json({ success: false, message: "Invalid token format" });
-      return;
-    }
+
+    const token = authHeader.split(" ")[1];
 
     const token_decode = jwt.verify(
       token,
@@ -25,9 +24,7 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    console.error("Admin auth error:", error);
     res.json({ success: false, message: "Invalid token" });
-    return;
   }
 };
 

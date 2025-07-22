@@ -48,8 +48,6 @@ const addProduct = async (req: CustomRequest, res: Response) => {
       name, description, category, price: Number(price), subCategory, bestseller:  bestseller === "true" ? true : false, sizes: JSON.parse(sizes), image: imagesUrl, date: Date.now()
     };
 
-    console.log("Product data:", productData);
-
     const product = new productModel(productData);
     await product.save();
 

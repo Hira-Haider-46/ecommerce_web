@@ -28,15 +28,15 @@ const Orders: React.FC = () => {
         }
       );
       if (res.data.success) {
-        let allOrdersItem : any[] = []
+        let allOrdersItem: any[] = [];
         res.data.orders.map((order: any) => {
-          order.items.map((item : any) => {
-            item['status'] = order.status;
-            item['payment'] = order.payment;
-            item['date'] = order.date;
-            item['paymentMethod'] = order.paymentMethod;
+          order.items.map((item: any) => {
+            item["status"] = order.status;
+            item["payment"] = order.payment;
+            item["date"] = order.date;
+            item["paymentMethod"] = order.paymentMethod;
             allOrdersItem.push(item);
-          })
+          });
         });
         setorderData(allOrdersItem.reverse());
         console.log(allOrdersItem);
@@ -52,7 +52,7 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     loadOrderData();
-  }, []);
+  }, [token, backendUrl]);
 
   return (
     <div className="border-t pt-16 border-gray-400">
@@ -86,10 +86,14 @@ const Orders: React.FC = () => {
                     <p>Size: {item.size}</p>
                   </div>
                   <p className="mt-1">
-                    Date: <span className="text-gray-400">{new Date(item.date).toLocaleDateString()}</span>
+                    Date:{" "}
+                    <span className="text-gray-400">
+                      {new Date(item.date).toLocaleDateString()}
+                    </span>
                   </p>
                   <p className="mt-1">
-                    Payment: <span className="text-gray-400">{item.paymentMethod}</span>
+                    Payment:{" "}
+                    <span className="text-gray-400">{item.paymentMethod}</span>
                   </p>
                 </div>
               </div>
