@@ -9,6 +9,7 @@ import Orders from "./pages/Orders";
 import PlaceOrder from "./pages/PlaceOrder";
 import Product from "./pages/Product";
 import CustomerLayout from "./layouts/CustomerLayout";
+import Verify from "./pages/Verify";
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Route path="login" element={<Login />} />
         <Route path="orders" element={<Orders />} />
         <Route path="placeorder" element={<PlaceOrder />} />
+        <Route path="verify" element={<Verify />} />
       </Route>
       <Route path="*" element={<div>404 Not Found</div>} />
     </Routes>

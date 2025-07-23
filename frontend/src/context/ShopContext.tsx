@@ -86,7 +86,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
         await axios.post(
           `${backendUrl}/api/cart/add`,
           { id, size },
-          { headers: { token } }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success("Item added to cart");
       } catch (error) {
@@ -125,7 +125,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
           await axios.put(
             `${backendUrl}/api/cart/update`,
             { id, size, quantity },
-            { headers: { token } }
+            { headers: { Authorization: `Bearer ${token}` } }
           );
         } catch (error) {
           toast.error(
@@ -155,14 +155,16 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({
           `${backendUrl}/api/cart/get`,
           {},
           {
-            headers: { token: userToken },
+            headers: { Authorization: `Bearer ${userToken}` },
           }
         );
         if (res.data.success) {
           setCartItems(res.data.cartData);
+        } else {
+          toast.error(res.data.message);
         }
       } catch (error) {
-        console.error("Error fetching cart data:", error);
+        toast.error(error instanceof Error ? error.message : "Unknown error occurred");
       }
     },
     [backendUrl]

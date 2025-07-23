@@ -63,7 +63,7 @@ const PlaceOrder: React.FC = () => {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + delivery_fee
-      }
+      };
       switch (method) {
         case "cod":
           const res = await axios.post(backendUrl + "/api/order/place", orderData, {
@@ -79,6 +79,17 @@ const PlaceOrder: React.FC = () => {
           }
           break;
         case "stripe":
+           const resStripe = await axios.post(backendUrl + '/api/order/stripe', orderData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+           });
+           if(resStripe.data.success) {
+            const {session_url} = resStripe.data;
+            window.location.href = session_url;
+           } else {
+            toast.error(resStripe.data.message || "Error with Stripe payment");
+           }
           break;
         case "razor":
           break;

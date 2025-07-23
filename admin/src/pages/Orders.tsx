@@ -57,7 +57,7 @@ export default function Orders({ token }: { token: string }) {
   }, [token]);
 
   return (
-    <div>
+    <div className="pr-6 md:pr-15">
       <h3>Orders Page</h3>
       <div>
         {orders.length > 0 ? (

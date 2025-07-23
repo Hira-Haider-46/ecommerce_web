@@ -39,7 +39,6 @@ const Orders: React.FC = () => {
           });
         });
         setorderData(allOrdersItem.reverse());
-        console.log(allOrdersItem);
       } else {
         toast.error(res.data.message);
       }
