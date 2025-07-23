@@ -7,6 +7,7 @@ import {
   userOrders,
   updateStatus,
   verifyStripe,
+  verifyRazor,
 } from "../controllers/orderController.ts";
 import adminAuth from "../middleware/adminAuth.ts";
 import authUser from "../middleware/auth.ts";
@@ -23,5 +24,6 @@ orderRouter.post("/razorpay", authUser, placeOrderRazorpay);
 orderRouter.post("/userorders", authUser, userOrders);
 
 orderRouter.post('/verifyStripe', authUser, verifyStripe);
+orderRouter.post('/verifyRazorpay', authUser, verifyRazor);
 
 export default orderRouter;

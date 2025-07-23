@@ -43,6 +43,37 @@ const PlaceOrder: React.FC = () => {
     setformData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const initPay = (order: any) => {
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Order Payment',
+      description: 'Order Payment',
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response: any) => {
+        try {
+          const {data} = await axios.post(backendUrl + '/api/order/verifyRazorpay', response, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if(data.success) {
+            setCartItems({});
+            navigate('/orders');
+          } else {
+            toast.error(data.message || "Error verifying payment");
+          }
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : "Unknown error");
+        }
+      },
+    }
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  }
+
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -92,6 +123,16 @@ const PlaceOrder: React.FC = () => {
            }
           break;
         case "razor":
+          const resRazor = await axios.post(backendUrl + '/api/order/razorpay', orderData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          });
+          if(resRazor.data.success) {
+            initPay(resRazor.data.order);
+          } else {
+            toast.error(resRazor.data.message || "Error with Razorpay payment");
+          }
           break;
         default:
           break;
